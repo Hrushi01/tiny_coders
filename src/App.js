@@ -1,10 +1,13 @@
 import "./App.css";
-import InputLocation from "./InputLocation";
+// import InputLocation from "./InputLocation";
+import Inputtt from "./InputLocation/Inputtt"
 
 function App() {
   return (
     <div className="App">
-      <InputLocation />
+      {/* <InputLocation /> */}
+   
+   <Inputtt/>
     </div>
   );
 }

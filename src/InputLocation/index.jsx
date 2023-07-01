@@ -35,7 +35,7 @@ function Index() {
       justifyContent="center"
       height="100vh"
       p={4}
-      bgGradient="linear(to-b, teal.200, teal.500)"
+      bgColor="White"
     >
       <Heading mb={8} size="xl" color="white">
         Welcome to Your Dream Vacation Planner
