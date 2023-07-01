@@ -1,4 +1,4 @@
-const GPT_KEY = process.env.GPT_API_KEY;
+const GPT_KEY = "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";
 
 const headers = {
   'Content-Type': 'application/json',

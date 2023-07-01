@@ -1,6 +1,6 @@
 import "./App.css";
 // import InputLocation from "./InputLocation";
-import Inputtt from "./InputLocation/Inputtt"
+import Inputtt from "./InputLocation/FinalInput"
 
 function App() {
   return (
