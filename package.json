@@ -11,7 +11,7 @@
     "start": "npm run build && npm run backend"
   },
   "engines": {
-    "node": ">=14.20.1"
+    "node": "20.3.1"
   },
   "keywords": [],
   "author": "",
