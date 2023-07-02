@@ -16,6 +16,9 @@
   "bugs": {
     "url": "https://github.com/Hrushi01/tiny_coders/issues"
   },
+  "engines": {
+    "node": ">=14.20.1"
+  },
   "homepage": "https://github.com/Hrushi01/tiny_coders#readme",
   "dependencies": {
     "body-parser": "^1.20.2",

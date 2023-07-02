@@ -19,6 +19,9 @@
     "react-share": "^4.4.1",
     "web-vitals": "^2.1.4"
   },
+  "engines": {
+    "node": ">=14.20.1"
+  },
   "scripts": {
     "start": "set PORT=3000 && react-scripts start",
     "build": "react-scripts build",
