@@ -81,6 +81,21 @@ app.post("/api/saveItinerary", async (req, res) => {
 });
 
 
+// Define the API endpoint to fetch all itineraries
+app.get("/api/getItineraries", async (req, res) => {
+  try {
+    // Fetch all the itineraries from the database
+    const itineraries = await Itinerary.find();
+
+    res.status(200).json(itineraries);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "An error occurred" });
+  }
+});
+
+
+
 console.log(PORT)
 app.listen(PORT, (Error) => {
   console.log(`Application listening on PORT ${PORT}`);
