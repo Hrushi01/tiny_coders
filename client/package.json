@@ -2,8 +2,10 @@
   "name": "tiny_coders",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=14.20.1"
+  },
   "dependencies": {
-    "@chakra-ui/react": "^2.7.1",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@testing-library/jest-dom": "^5.16.5",
@@ -19,9 +21,7 @@
     "react-share": "^4.4.1",
     "web-vitals": "^2.1.4"
   },
-  "engines": {
-    "node": ">=14.20.1"
-  },
+
   "scripts": {
     "start": "set PORT=3000 && react-scripts start",
     "build": "react-scripts build",
