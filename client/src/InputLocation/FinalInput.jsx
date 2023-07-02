@@ -13,11 +13,11 @@ export default function Inputtt() {
   const [message, setMessage] = useState("");
   const [daysArray, setDaysArray] = useState([]);
   const [sharedContent, setSharedContent] = useState("");
-const [shareOption, setShareOption] = useState("");
-
+  const [recentSearches, setRecentSearches] = useState([]);
 
   useEffect(() => {
     checkRedirect();
+    fetchRecentSearches();
   }, []);
 
   function checkRedirect() {
@@ -82,7 +82,6 @@ const [shareOption, setShareOption] = useState("");
         itinerary: updatedItinerary,
       };
 
-      // Send the data to the backend
       const response = await axios.post(`${BASE_URL}/api/saveItinerary`, data);
       console.log("Response from backend:", response.data);
 
@@ -102,6 +101,16 @@ const [shareOption, setShareOption] = useState("");
     }
     setDaysArray(days);
   }, [itinerary]);
+
+  // Fetch recent searches from the backend
+  const fetchRecentSearches = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/api/recentSearches`);
+      setRecentSearches(response.data);
+    } catch (error) {
+      console.log("Error fetching recent searches:", error);
+    }
+  };
 
   return (
     <main>
@@ -147,29 +156,42 @@ const [shareOption, setShareOption] = useState("");
               </div>
             ))}
         </div>
-        <div>
 
-        {sharedContent && (
-  <div style={styles.shareOptions}>
-    <h2>Share Trip Details</h2>
-    <div style={styles.shareButtons}>
-      <EmailShareButton
-        subject={`${request.city} Trip Details`}
-        body={sharedContent}
-        separator="\n\n"
-      >
-        <button className="button" style={styles.button}>
-          Share via Email
-        </button>
-      </EmailShareButton>
-      <WhatsappShareButton title={`${request.city} Trip Details`} url={sharedContent}>
-        <button className="button" style={styles.button}>
-          Share via WhatsApp
-        </button>
-      </WhatsappShareButton>
-    </div>
-  </div>
-)}
+        <div>
+          <h2>Recent Searches</h2>
+          {recentSearches.map((search, index) => (
+            <div key={index}>
+              <p>{search.city}</p>
+              <p>{search.days}</p>
+              <p>{search.itinerary}</p>
+            </div>
+          ))}
+        </div>
+        <div>
+          {sharedContent && (
+            <div style={styles.shareOptions}>
+              <h2>Share Trip Details</h2>
+              <div style={styles.shareButtons}>
+                <EmailShareButton
+                  subject={`${request.city} Trip Details`}
+                  body={sharedContent}
+                  separator="\n\n"
+                >
+                  <button className="button" style={styles.button}>
+                    Share via Email
+                  </button>
+                </EmailShareButton>
+                <WhatsappShareButton
+                  title={`${request.city} Trip Details`}
+                  url={sharedContent}
+                >
+                  <button className="button" style={styles.button}>
+                    Share via WhatsApp
+                  </button>
+                </WhatsappShareButton>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </main>
