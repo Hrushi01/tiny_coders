@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getItinerary } from "./apis/getitinerary";
 import { getPointsOfInterest } from "./apis/getpoints";
+import getdata from "./apis/getdata";
 
 export default function Inputtt() {
   const [request, setRequest] = useState({ days: "", city: "" });
@@ -14,8 +15,8 @@ export default function Inputtt() {
   }, []);
 
   function checkRedirect() {
-    if (window.location.hostname === "gpt-travel-advisor.vercel.app") {
-      window.location.replace("https://www.roamaround.io/");
+    if (window.location.hostname === "gpt-tour-planner.vercel.app") {
+      window.location.replace("https://www.tinycoders.io/");
     }
   }
 
@@ -36,14 +37,25 @@ export default function Inputtt() {
         setMessage("Almost there ...");
       }, 15000);
 
-      const { pointsOfInterestPrompt, itinerary } = await getItinerary(
-        request.days,
-        request.city
-      );
+      const {
+        pointsOfInterestPrompt,
+        itinerary,
+        morningPrompt,
+        afternoonPrompt,
+        eveningPrompt,
+      } = await getItinerary(request.days, request.city);
 
       const pointsOfInterest = await getPointsOfInterest(
         pointsOfInterestPrompt
       );
+      console.log("potttt", pointsOfInterest);
+
+      const extractedData = await getdata(
+        morningPrompt,
+        eveningPrompt,
+        afternoonPrompt
+      );
+      console.log("heheh", extractedData);
 
       let updatedItinerary = itinerary;
 
@@ -76,7 +88,7 @@ export default function Inputtt() {
     <main>
       <div className="app-container">
         <h1 style={styles.header} className="hero-header">
-          Roam Around
+          Tiny Travelers
         </h1>
         <div style={styles.formContainer} className="form-container">
           <input
@@ -97,21 +109,18 @@ export default function Inputtt() {
             Build Itinerary
           </button>
         </div>
-        <div className="results-container">
+        <div className="results-container" style={styles.resultsContainer}>
           {loading && <p>{message}</p>}
-
           {itinerary &&
             daysArray.map((day, index) => (
-              <div style={{ marginBottom: "30px" }} key={index}>
-                <h2>{`Day ${index + 1}`}</h2>
-                {/* {console.log("day hrushi", day)} */}
-                <div>
+              <div style={styles.dayContainer} key={index}>
+                <h2 style={styles.dayHeading}>{`Day ${index + 1}`}</h2>
+                <div style={styles.activitiesContainer}>
                   {day
                     .trim()
                     .split(".")
                     .map((item, i) => (
-                      <div key={i}>
-                        {console.log("Item hrushi", item)}
+                      <div key={i} style={styles.activity}>
                         {item.trim()}
                       </div>
                     ))}
@@ -128,25 +137,45 @@ const styles = {
   header: {
     textAlign: "center",
     marginTop: "60px",
-    color: "#c683ff",
+    color: "#333",
     fontWeight: "900",
     fontFamily: "Poppins",
-    fontSize: "68px",
+    fontSize: "40px",
   },
   input: {
     padding: "10px 14px",
-    marginBottom: "4px",
+    marginBottom: "10px",
     outline: "none",
     fontSize: "16px",
-    width: "100%",
     borderRadius: "8px",
+    width: "100%",
   },
   formContainer: {
     display: "flex",
     flexDirection: "column",
-    margin: "20px auto 0px",
     padding: "20px",
-    boxShadow: "0px 0px 12px rgba(198, 131, 255, .2)",
+    boxShadow: "0px 0px 12px rgba(0, 0, 0, 0.2)",
     borderRadius: "10px",
+    width: "40rem",
+    margin: "auto",
+  },
+  resultsContainer: {
+    width: "40rem",
+    margin: "auto",
+  },
+  dayContainer: {
+    marginBottom: "30px",
+  },
+  dayHeading: {
+    fontSize: "24px",
+    marginBottom: "10px",
+  },
+  activitiesContainer: {
+    textAlign: "left",
+  },
+  activity: {
+    marginBottom: "10px",
+    fontSize: "16px",
+    color: "#333",
   },
 };

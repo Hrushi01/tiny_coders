@@ -15,7 +15,7 @@ export async function getItinerary(days, city) {
 Instructions:
     
     Plan an itinerary for each day, dividing it into four sections: Morning, Afternoon, Evening, and Night.
-    Ensure that the itinerary covers popular attractions, landmarks, and activities in Pune.
+    Ensure that the itinerary covers popular attractions, landmarks, and activities in ${city}.
     Estimate the budget required for each location, considering expenses for food, travel, stay, and any additional costs. also include Hotels.
     Make necessary adjustments in the itinerary if a particular visit requires more time, while maintaining the four-section structure.
     Present the budget in the local currency, allowing travelers to plan accordingly.
@@ -37,13 +37,27 @@ Instructions:
     const itinerary =
       data.choices && data.choices.length > 0 ? data.choices[0].text : "";
     const pointsOfInterestPrompt =
-      "Extract the points of interest out of this text, with no additional words, separated by commas: " +
+      "Extract the points of interest,budget,image link out of this text, with no additional words " +
       itinerary;
+    const morningPrompt =
+      "Extract the Morning content out of this text " + itinerary;
+    const afternoonPrompt =
+      "Extract the Afternoon content out of this text, separated by commas: " +
+      itinerary;
+    const eveningPrompt =
+      "Extract the Evening content out of this text, separated by commas: " +
+      itinerary;
+    // const pointsOfInterestPrompt =
+    // "Extract the points of interest out of this text, with no additional words, separated by commas: " +
+    // itinerary;
 
     return {
       message: "Success",
       pointsOfInterestPrompt,
       itinerary,
+      morningPrompt,
+      afternoonPrompt,
+      eveningPrompt,
     };
   } catch (error) {
     console.log("Error:", error);
