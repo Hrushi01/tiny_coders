@@ -105,7 +105,7 @@ export default function Inputtt() {
               setRequest((request) => ({ ...request, days: e.target.value }))
             }
           />
-          <button className="input-button" onClick={hitAPI}>
+          <button className="button" style={styles.button} onClick={hitAPI}>
             Build Itinerary
           </button>
         </div>
@@ -148,7 +148,7 @@ const styles = {
     outline: "none",
     fontSize: "16px",
     borderRadius: "8px",
-    width: "100%",
+    width: "90%",
   },
   formContainer: {
     display: "flex",
@@ -158,6 +158,11 @@ const styles = {
     borderRadius: "10px",
     width: "40rem",
     margin: "auto",
+  },
+  button: {
+    width: "90%",
+    padding: "0.7rem",
+    innerHeight: "10rem",
   },
   resultsContainer: {
     width: "40rem",
