@@ -158,15 +158,18 @@ export default function Inputtt() {
         </div>
 
         <div>
-          <h2>Recent Searches</h2>
-          {recentSearches.map((search, index) => (
-            <div key={index}>
-              <p>{search.city}</p>
-              <p>{search.days}</p>
-              <p>{search.itinerary}</p>
-            </div>
-          ))}
-        </div>
+  <h2>Recent Searches</h2>
+  {recentSearches
+    .filter((search) => search.itinerary) // Filter out searches without itinerary content
+    .map((search, index) => (
+      <div className="card" style={styles.card} key={index}>
+        <p className="city" style={styles.city}>{search.city}</p>
+        <p className="days" style={styles.days}>{search.days}</p>
+        <p className="itinerary" style={styles.itinerary}>{search.itinerary}</p>
+      </div>
+    ))}
+</div>
+
         <div>
           {sharedContent && (
             <div style={styles.shareOptions}>
@@ -247,5 +250,30 @@ const styles = {
     marginBottom: "10px",
     fontSize: "16px",
     color: "#333",
+  },
+  card: {
+    height: "auto",
+    width: "40%",
+    margin: "auto",
+    textAlign: "left",
+    padding: "10px",
+    boxShadow: "0px 0px 12px rgba(0, 0, 0, 0.2)",
+    borderRadius: "10px",
+    marginBottom: "10px",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+  },
+  city: {
+    fontSize: "18px",
+    fontWeight: "bold",
+    marginBottom: "5px",
+  },
+  days: {
+    fontSize: "16px",
+    marginBottom: "5px",
+  },
+  itinerary: {
+    fontSize: "14px",
   },
 };
