@@ -4,17 +4,37 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const cors = require("cors");
 const proxy = require('proxy-middleware')
+
+
+
+
+
+const app = express();
+
+//Setting Up CORS Policy
+var corsOptions = {
+  origin: "*",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+};
+app.options("*", cors()); // preFlight
+app.use("*", cors(corsOptions), function (req, res, next) {
+  next();
+});
+
+
 const dotenv = require("dotenv");
 dotenv.config({
   path: "./.env",
 });
-const app = express();
-app.use(proxy('http://localhost:8080', {
-    proxyReqPathResolver: (req) => {
-        return req.originalUrl
-    }
-}))
+// app.use(proxy('http://localhost:8080', {
+//     proxyReqPathResolver: (req) => {
+//         return req.originalUrl
+//     }
+// }))
 const { PORT } = process.env;
 
 
