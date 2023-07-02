@@ -1,17 +1,17 @@
-const GPT_KEY = "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";
+const GPT_KEY = "";
 
 const headers = {
-  'Content-Type': 'application/json',
+  "Content-Type": "application/json",
   Authorization: `Bearer ${GPT_KEY}`,
 };
 
 export async function getPointsOfInterest(pointsOfInterestPrompt) {
   try {
-    const response = await fetch('https://api.openai.com/v1/completions', {
-      method: 'POST',
+    const response = await fetch("https://api.openai.com/v1/completions", {
+      method: "POST",
       headers,
       body: JSON.stringify({
-        model: 'text-davinci-003',
+        model: "text-davinci-003",
         prompt: pointsOfInterestPrompt,
         temperature: 0,
         max_tokens: 300,
@@ -24,15 +24,15 @@ export async function getPointsOfInterest(pointsOfInterestPrompt) {
 
     if (data.choices && data.choices.length > 0) {
       const text = data.choices[0].text;
-      pointsOfInterest = text.split('\n');
+      pointsOfInterest = text.split("\n");
       pointsOfInterest = pointsOfInterest[pointsOfInterest.length - 1]
-        .split(',')
+        .split(",")
         .map((item) => item.trim());
     }
 
     return pointsOfInterest;
   } catch (error) {
-    console.log('Error:', error);
-    throw new Error('Failed to fetch points of interest');
+    console.log("Error:", error);
+    throw new Error("Failed to fetch points of interest");
   }
 }

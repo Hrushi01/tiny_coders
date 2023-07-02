@@ -1,6 +1,6 @@
-import fetch from 'node-fetch';
+import fetch from "node-fetch";
 
-const GS_KEY = "AIzaSyDEizSnjtANj0Y7z9phBhSRTrrNYjSSXzU";
+const GS_KEY = "";
 
 export async function fetchLocations(pointsOfInterest, city) {
   try {
@@ -9,7 +9,7 @@ export async function fetchLocations(pointsOfInterest, city) {
       pointsOfInterest.map(async (point) => {
         try {
           const GSURL = `https://www.googleapis.com/customsearch/v1?key=${GS_KEY}&cx=6573f103116714e0d&q=${encodeURIComponent(
-            point + ' in ' + city
+            point + " in " + city
           )}`;
 
           const response = await fetch(GSURL);
@@ -19,14 +19,14 @@ export async function fetchLocations(pointsOfInterest, city) {
             locations.push(data.items[0]);
           }
         } catch (err) {
-          console.log('error: ', err);
+          console.log("error: ", err);
         }
       })
     );
 
     return locations;
   } catch (err) {
-    console.log('error: ', err);
-    throw new Error('Failed to fetch data');
+    console.log("error: ", err);
+    throw new Error("Failed to fetch data");
   }
 }

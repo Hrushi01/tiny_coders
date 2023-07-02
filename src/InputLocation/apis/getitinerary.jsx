@@ -1,7 +1,7 @@
-const GPT_KEY = "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";
+const GPT_KEY = "";
 console.log("hru", GPT_KEY);
 const headers = {
-  'Content-Type': 'application/json',
+  "Content-Type": "application/json",
   Authorization: `Bearer ${GPT_KEY}`,
 };
 
@@ -19,14 +19,13 @@ Instructions:
     Estimate the budget required for each location, considering expenses for food, travel, stay, and any additional costs. also include Hotels.
     Make necessary adjustments in the itinerary if a particular visit requires more time, while maintaining the four-section structure.
     Present the budget in the local currency, allowing travelers to plan accordingly.
-    Do not add any additional text at the end of itinerary for eg: Notes`
+    Do not add any additional text at the end of itinerary for eg: Notes. `;
 
-
-    const response = await fetch('https://api.openai.com/v1/completions', {
-      method: 'POST',
+    const response = await fetch("https://api.openai.com/v1/completions", {
+      method: "POST",
       headers,
       body: JSON.stringify({
-        model: 'text-davinci-003',
+        model: "text-davinci-003",
         prompt: basePrompt,
         temperature: 0,
         max_tokens: 550,
@@ -36,18 +35,18 @@ Instructions:
     const data = await response.json();
 
     const itinerary =
-      data.choices && data.choices.length > 0 ? data.choices[0].text : '';
+      data.choices && data.choices.length > 0 ? data.choices[0].text : "";
     const pointsOfInterestPrompt =
-      'Extract the points of interest out of this text, with no additional words, separated by commas: ' +
+      "Extract the points of interest out of this text, with no additional words, separated by commas: " +
       itinerary;
 
     return {
-      message: 'Success',
+      message: "Success",
       pointsOfInterestPrompt,
       itinerary,
     };
   } catch (error) {
-    console.log('Error:', error);
-    throw new Error('Failed to fetch itinerary');
+    console.log("Error:", error);
+    throw new Error("Failed to fetch itinerary");
   }
 }
