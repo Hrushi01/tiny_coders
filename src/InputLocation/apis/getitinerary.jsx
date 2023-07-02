@@ -1,5 +1,4 @@
-const GPT_KEY = "";
-console.log("hru", GPT_KEY);
+const GPT_KEY = "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";
 const headers = {
   "Content-Type": "application/json",
   Authorization: `Bearer ${GPT_KEY}`,

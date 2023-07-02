@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
 
-const GS_KEY = "";
+const GS_KEY = "AIzaSyDEizSnjtANj0Y7z9phBhSRTrrNYjSSXzU";
 
 export async function fetchLocations(pointsOfInterest, city) {
   try {

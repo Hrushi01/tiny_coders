@@ -1,49 +1,62 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const Plan = require('./Models/plan'); // Import the Plan model
+// Install required dependencies:
+// npm install express body-parser mongoose
 
-// Create an Express application
+const express = require("express");
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+const proxy = require('proxy-middleware')
+
 const app = express();
+app.use(proxy('http://localhost:3001', {
+    proxyReqPathResolver: (req) => {
+        return req.originalUrl
+    }
+}))
+
+app.listen(3001)
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
-
-// MongoDB connection URL
 const mongoURL = 'mongodb+srv://admin:admin123@cluster0.2rf47.mongodb.net/LMS?retryWrites=true&w=majority';
 
 // Connect to MongoDB
-mongoose.connect(mongoURL, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => {
-        console.log('Connected to MongoDB');
-        // Start the server
-        const port = process.env.PORT || 3000;
-        app.listen(port, () => {
-            console.log(`Express server listening on port ${port} in ${app.settings.env} mode`);
-        });
-    })
-    .catch((err) => console.log(err));
+mongoose.connect(mongoURL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
-// Main page of backend - Add a function API that will take place, day, and body from frontend and store it in the database using Mongoose schema
+// Define a schema and model for the itinerary
+const itinerarySchema = new mongoose.Schema({
+  days: String,
+  city: String,
+  itinerary: String,
+});
 
-// Define route for storing data
-app.post('/api/plans', (req, res) => {
-    const { place, day, body } = req.body;
+const Itinerary = mongoose.model("Itinerary", itinerarySchema);
 
-    const newPlan = new Plan({
-        Place: place,
-        Day: day,
-        body: body
+// Define the API endpoint to save the itinerary
+app.post("/api/saveItinerary", async (req, res) => {
+  try {
+    const { days, city, itinerary } = req.body;
+
+    // Create a new itinerary document
+    const newItinerary = new Itinerary({
+      days,
+      city,
+      itinerary,
     });
 
-    newPlan.save()
-        .then(result => {
-            console.log('Data stored successfully:', result);
-            res.sendStatus(201); // Send a success response
-        })
-        .catch(error => {
-            console.error('Error storing data:', error);
-            res.sendStatus(500); // Send an error response
-        });
+    // Save the itinerary to the database
+    await newItinerary.save();
+
+    res.status(200).json({ message: "Itinerary saved successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "An error occurred" });
+  }
+});
+
+// Start the server
+app.listen(3000, () => {
+  console.log("Server is running on port 3000");
 });

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { getItinerary } from "./apis/getitinerary";
 import { getPointsOfInterest } from "./apis/getpoints";
 import getdata from "./apis/getdata";
+import axios from "axios";
 
 export default function Inputtt() {
   const [request, setRequest] = useState({ days: "", city: "" });
@@ -67,6 +68,18 @@ export default function Inputtt() {
       });
 
       setItinerary(updatedItinerary);
+
+      // Backend API call
+      const data = {
+        days: request.days,
+        city: request.city,
+        itinerary: updatedItinerary,
+      };
+
+      // Send the data to the backend
+      const response = await axios.post("/api/saveItinerary", data);
+      console.log("Response from backend:", response.data);
+
       setLoading(false);
     } catch (err) {
       console.log("error: ", err);
