@@ -1,4 +1,4 @@
-const GPT_KEY = "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";
+const GPT_KEY = "";
 
 const headers = {
   "Content-Type": "application/json",

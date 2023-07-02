@@ -3,6 +3,8 @@ import { getItinerary } from "./apis/getitinerary";
 import { getPointsOfInterest } from "./apis/getpoints";
 import getdata from "./apis/getdata";
 import axios from "axios";
+import { EmailShareButton, WhatsappShareButton } from "react-share";
+
 
 export default function Inputtt() {
   const [request, setRequest] = useState({ days: "", city: "" });
@@ -10,6 +12,9 @@ export default function Inputtt() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [daysArray, setDaysArray] = useState([]);
+  const [sharedContent, setSharedContent] = useState("");
+const [shareOption, setShareOption] = useState("");
+
 
   useEffect(() => {
     checkRedirect();
@@ -68,6 +73,7 @@ export default function Inputtt() {
       });
 
       setItinerary(updatedItinerary);
+      setSharedContent(updatedItinerary);
 
       // Backend API call
       const data = {
@@ -140,6 +146,30 @@ export default function Inputtt() {
                 </div>
               </div>
             ))}
+        </div>
+        <div>
+
+        {sharedContent && (
+  <div style={styles.shareOptions}>
+    <h2>Share Trip Details</h2>
+    <div style={styles.shareButtons}>
+      <EmailShareButton
+        subject={`${request.city} Trip Details`}
+        body={sharedContent}
+        separator="\n\n"
+      >
+        <button className="button" style={styles.button}>
+          Share via Email
+        </button>
+      </EmailShareButton>
+      <WhatsappShareButton title={`${request.city} Trip Details`} url={sharedContent}>
+        <button className="button" style={styles.button}>
+          Share via WhatsApp
+        </button>
+      </WhatsappShareButton>
+    </div>
+  </div>
+)}
         </div>
       </div>
     </main>
