@@ -7,7 +7,7 @@
     "node": ">=14.20.1"
   },
   "scripts": {
-    "dev": "concurrently \"cd client && npm start\" \"cd backend && npm start\"",
+    "dev": "concurrently \"cd backend && npm start\" \"cd client && npm start\"",
     "build": "cd client && npm run build",
     "client": "cd client && npm start",
     "backend": "cd backend && npm start",

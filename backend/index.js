@@ -96,7 +96,6 @@ app.get("/api/getItineraries", async (req, res) => {
 
 
 
-console.log(PORT)
 app.listen(PORT, (Error) => {
   console.log(`Application listening on PORT ${PORT}`);
 });
