@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const path = require('path');
 
 const app = express();
 
@@ -11,7 +12,25 @@ const dotenv = require("dotenv");
 dotenv.config({
   path: "./.env",
 });
+
 const PORT = process.env.PORT;
+try {
+  //Working API
+
+  //Error Handling Middleware
+
+  app.use((Error, req, res, next) => {
+    res.status(500).json({
+      status: "System Error",
+      message: "Unable to fetch your request",
+      Error: Error,
+    });
+    console.log("nnnnnnnnn--->", Error);
+  });
+} catch (Error) {
+  console.log("Weeeeee", Error);
+}
+
 app.use(bodyParser.json());
 
 const mongoURL = process.env.MONGO_URI;
@@ -70,6 +89,14 @@ app.get("/api/recentSearches", async (req, res) => {
   }
 });
 
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "..", "client", "build")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "..", "client", "build", "index.html"));
+  });
+}
 app.listen(PORT, (Error) => {
   console.log(`Application listening on PORT ${PORT}`);
 });
