@@ -36,7 +36,7 @@ Instructions:
     const itinerary =
       data.choices && data.choices.length > 0 ? data.choices[0].text : "";
     const pointsOfInterestPrompt =
-      "Extract the points of interest,budget,image link out of this text, with no additional words " +
+      "Extract the points of interest out of this text, with no additional words, separated by commas: " +
       itinerary;
     const morningPrompt =
       "Extract the Morning content out of this text " + itinerary;
