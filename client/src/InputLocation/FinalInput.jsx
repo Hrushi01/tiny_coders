@@ -4,11 +4,13 @@ import { getPointsOfInterest } from "./apis/getpoints";
 import getdata from "./apis/getdata";
 import axios from "axios";
 import { EmailShareButton, WhatsappShareButton } from "react-share";
+
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export default function Inputtt() {
   const [request, setRequest] = useState({ days: "", city: "" });
   const [itinerary, setItinerary] = useState("");
+  const [points, setPoints] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [daysArray, setDaysArray] = useState([]);
@@ -32,6 +34,7 @@ export default function Inputtt() {
       setMessage("Building itinerary...");
       setLoading(true);
       setItinerary("");
+      setPoints([]);
 
       setTimeout(() => {
         if (!loading) return;
@@ -54,7 +57,9 @@ export default function Inputtt() {
       const pointsOfInterest = await getPointsOfInterest(
         pointsOfInterestPrompt
       );
-      console.log("potttt", pointsOfInterest);
+      setPoints(pointsOfInterest);
+
+      console.log("potttt", pointsOfInterest, points);
 
       const extractedData = await getdata(
         morningPrompt,
@@ -79,7 +84,7 @@ export default function Inputtt() {
       const data = {
         days: request.days,
         city: request.city,
-        itinerary: updatedItinerary,
+        itinerary: pointsOfInterest.join("\n"),
       };
 
       const response = await axios.post(`${BASE_URL}/api/saveItinerary`, data);
@@ -158,22 +163,34 @@ export default function Inputtt() {
         </div>
 
         <div>
-  <h2>Recent Searches</h2>
-  {recentSearches
-    .filter((search) => search.itinerary) // Filter out searches without itinerary content
-    .map((search, index) => (
-      <div className="card" style={styles.card} key={index}>
-        <p className="city" style={styles.city}>{search.city}</p>
-        <p className="days" style={styles.days}>{search.days}</p>
-        <p className="itinerary" style={styles.itinerary}>{search.itinerary}</p>
-      </div>
-    ))}
-</div>
+          <h2 style={styles.sectionHeading}>Recent Searches</h2>
+          <div style={styles.recentSearchesContainer}>
+            {recentSearches
+              .filter((search) => search.itinerary) // Filter out searches without itinerary content
+              .map((search, index) => (
+                <div className="card" style={styles.card} key={index}>
+                  <p className="city" style={styles.city}>
+                    {search.city}
+                  </p>
+                  <p className="days" style={styles.days}>
+                    <strong>{search.days} Days</strong>
+                  </p>
+                  <div className="itinerary" style={styles.itinerary}>
+                    {search.itinerary.split("\n").map((item, i) => (
+                      <div key={i} style={styles.itineraryItem}>
+                        {item}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+          </div>
+        </div>
 
         <div>
           {sharedContent && (
             <div style={styles.shareOptions}>
-              <h2>Share Trip Details</h2>
+              <h2 style={styles.sectionHeading}>Share Trip Details</h2>
               <div style={styles.shareButtons}>
                 <EmailShareButton
                   subject={`${request.city} Trip Details`}
@@ -213,35 +230,48 @@ const styles = {
   input: {
     padding: "10px 14px",
     marginBottom: "10px",
-    outline: "none",
-    fontSize: "16px",
-    borderRadius: "8px",
-    width: "90%",
+    borderRadius: "4px",
+    border: "1px solid #ccc",
+    width: "100%",
+  },
+  button: {
+    padding: "10px 20px",
+    background: "#333",
+    color: "#fff",
+    border: "none",
+    borderRadius: "4px",
+    cursor: "pointer",
+    width: "100%",
   },
   formContainer: {
     display: "flex",
     flexDirection: "column",
-    padding: "20px",
-    boxShadow: "0px 0px 12px rgba(0, 0, 0, 0.2)",
-    borderRadius: "10px",
-    width: "40rem",
-    margin: "auto",
+    alignItems: "center",
+    justifyContent: "center",
+    margin: "40px auto",
+    maxWidth: "60%",
   },
-  button: {
-    width: "90%",
-    padding: "0.7rem",
-    innerHeight: "10rem",
-  },
+  // resultsContainer: {
+  //   display: "flex",
+  //   flexDirection: "column",
+  //   alignItems: "center",
+  //   justifyContent: "center",
+  //   margin: "40px auto",
+  //   maxWidth: "800px",
+  // },
   resultsContainer: {
     width: "40rem",
     margin: "auto",
   },
   dayContainer: {
-    marginBottom: "30px",
+    marginBottom: "40px",
   },
   dayHeading: {
-    fontSize: "24px",
+    textAlign: "center",
     marginBottom: "10px",
+    fontSize: "24px",
+    fontWeight: "bold",
+    fontFamily: "Poppins",
   },
   activitiesContainer: {
     textAlign: "left",
@@ -251,29 +281,78 @@ const styles = {
     fontSize: "16px",
     color: "#333",
   },
-  card: {
-    height: "auto",
-    width: "40%",
+  sectionHeading: {
+    textAlign: "center",
+    marginTop: "40px",
+    marginBottom: "20px",
+    color: "#333",
+    fontWeight: "bold",
+    fontFamily: "Poppins",
+    fontSize: "24px",
+  },
+  recentSearchesContainer: {
+    display: "flex",
+    overflowX: "auto",
+    border: "1px solid #000000",
+    borderRadius: "10px",
+    padding: "10px",
+    marginBottom: "1rem",
+    width: "90%",
     margin: "auto",
-    textAlign: "left",
+  },
+
+  card: {
+    flex: "0 0 auto",
+    width: "15rem",
+    marginRight: "10px",
     padding: "10px",
     boxShadow: "0px 0px 12px rgba(0, 0, 0, 0.2)",
     borderRadius: "10px",
-    marginBottom: "10px",
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
   },
+  //
   city: {
     fontSize: "18px",
     fontWeight: "bold",
     marginBottom: "5px",
+    height: "2rem",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
   },
+
   days: {
     fontSize: "16px",
     marginBottom: "5px",
+    height: "1.5rem",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+    fontWeight: "2rem",
+    color: "#777",
   },
+
   itinerary: {
     fontSize: "14px",
+    height: "10rem",
+    overflowY: "auto",
+  },
+  itineraryItem: {
+    marginBottom: "5px",
+  },
+  shareOptions: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    margin: "40px auto",
+    maxWidth: "800px",
+  },
+  shareButtons: {
+    display: "flex",
+    justifyContent: "center",
+    marginTop: "20px",
   },
 };
